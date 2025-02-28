@@ -9,7 +9,7 @@ const controller = {
             const { page, limit } = req.query;
             const result = await paginate(Project, {}, page, limit);
             res.status(200).json(result);
-        } catch (error) {
+        } catch(error) {
             res.status(500).json({ message: "Lỗi khi lấy danh sách dự án", error });
         }
     },
@@ -18,6 +18,7 @@ const controller = {
     create: async (req, res) => {
         try {
             const { name, technologies, duration, images, githubLink, projectLink } = req.body;
+
             const newProject = new Project({
                 id: uuidv4(),
                 name,
@@ -31,8 +32,25 @@ const controller = {
             await newProject.save();
 
             res.status(201).json({ message: "Dự án đã được tạo!", project: newProject });
-        } catch (error) {
+        } catch(error) {
             res.status(500).json({ message: "Lỗi khi tạo dự án", error });
+        }
+    },
+    /* [PUT] api/v1/projects/:id */
+    update: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const updates = req.body;
+
+            const updatedProject = await Project.findOneAndUpdate({ id }, updates, { new: true });
+
+            if(!updatedProject) {
+                return res.status(404).json({ message: "Không tìm thấy dự án" });
+            }
+
+            res.status(200).json({ message: "Dự án đã được cập nhật!", project: updatedProject });
+        } catch(error) {
+            res.status(500).json({ message: "Lỗi khi cập nhật dự án", error });
         }
     },
 };
