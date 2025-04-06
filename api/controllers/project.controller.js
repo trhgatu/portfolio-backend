@@ -18,6 +18,9 @@ const controller = {
     create: async (req, res) => {
         try {
             const { name, technologies, duration, images, githubLink, projectLink } = req.body;
+            if (!name) {
+                return res.status(400).json({ message: "Tên dự án không được để trống" });
+            }
 
             const newProject = new Project({
                 id: uuidv4(),
