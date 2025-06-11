@@ -13,11 +13,28 @@ const controller = {
             res.status(500).json({ message: "Lỗi khi lấy danh sách dự án", error });
         }
     },
+    /* [GET] api/v1/projects/:id */
+    getById: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const project = await Project.findOne({ id });
+
+            if(!project) {
+                return res.status(404).json({ message: "Không tìm thấy dự án" });
+            }
+
+            res.status(200).json({
+                data: project
+            });
+        } catch(error) {
+            res.status(500).json({ message: "Lỗi khi lấy chi tiết dự án", error });
+        }
+    },
 
     /* [POST] api/v1/projects */
     create: async (req, res) => {
         try {
-            const { name, technologies, duration, images, githubLink, projectLink } = req.body;
+            const { name, technologies, duration, images, githubLink, projectLink, status } = req.body;
 
             const newProject = new Project({
                 id: uuidv4(),
@@ -27,6 +44,7 @@ const controller = {
                 images,
                 githubLink,
                 projectLink,
+                status
             });
 
             await newProject.save();

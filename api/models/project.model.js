@@ -15,6 +15,9 @@ const projectSchema = new mongoose.Schema(
     name: {
       type: String,
     },
+    status: {
+      type: String,
+    },
     slug: {
       type: String,
       unique: true,
