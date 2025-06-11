@@ -9,6 +9,9 @@ const projectSchema = new mongoose.Schema(
       default: uuidv4,
       unique: true,
     },
+    description: {
+      type: String
+    },
     name: {
       type: String,
     },
